@@ -681,7 +681,28 @@
 
 <footer>
     <p>made with <span class="heart">&#9829;</span> for an absolute legend</p>
+    <p style="margin-top: 1rem;"><a href="#" id="impressum-link" style="color: var(--muted); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.1em; opacity: 0.5; transition: opacity 0.3s;">IMPRESSUM</a></p>
 </footer>
+
+<div id="impressum-overlay" style="display:none; position:fixed; inset:0; z-index:10000; background:rgba(6,6,14,0.85); backdrop-filter:blur(10px); align-items:center; justify-content:center;">
+    <div style="max-width:500px; padding:3rem; border:1px solid rgba(255,255,255,0.08); border-radius:1.5rem; background:rgba(255,255,255,0.03); position:relative;">
+        <button id="impressum-close" style="position:absolute; top:1rem; right:1.5rem; background:none; border:none; color:var(--muted); font-size:1.5rem; cursor:pointer;">&times;</button>
+        <div class="section-label" style="margin-bottom:1.5rem;">Legal Notice</div>
+        <h3 style="font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:700; margin-bottom:1.5rem;">Impressum</h3>
+        <div style="color:var(--muted); font-size:0.9rem; line-height:1.8;">
+            <p>Angaben gem. &sect; 5 DDG</p>
+            <p style="margin-top:1rem;"><strong style="color:var(--text);">maximlion GmbH</strong><br>
+            Heinrich-Mueller-Str. 5<br>
+            90530 Wendelstein</p>
+            <p style="margin-top:1rem;"><strong style="color:var(--text);">Kontakt</strong><br>
+            E-Mail: newsletter@maximilion.ai</p>
+            <p style="margin-top:1rem;"><strong style="color:var(--text);">Verantwortlich f&uuml;r den Inhalt gem. &sect; 18 Abs. 2 MStV:</strong><br>
+            maximlion GmbH<br>
+            Heinrich-Mueller-Str. 5<br>
+            90530 Wendelstein</p>
+        </div>
+    </div>
+</div>
 
 <script>
 // ---- MESH GRADIENT BACKGROUND ----
@@ -861,6 +882,19 @@ function colorWave() {
         { filter: 'brightness(1)' }
     ], { duration: 1500 });
 }
+
+// ---- IMPRESSUM MODAL ----
+document.getElementById('impressum-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    const overlay = document.getElementById('impressum-overlay');
+    overlay.style.display = 'flex';
+});
+document.getElementById('impressum-close').addEventListener('click', () => {
+    document.getElementById('impressum-overlay').style.display = 'none';
+});
+document.getElementById('impressum-overlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) e.currentTarget.style.display = 'none';
+});
 
 function launchFireworks() {
     const colors = ['#7c5cfc', '#fc5c9c', '#5cfcb6', '#fccc5c', '#5cacfc'];
