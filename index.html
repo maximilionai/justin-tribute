@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Justin Is Great</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite alternate;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.3)); }
+            to { filter: drop-shadow(0 0 40px rgba(240, 147, 251, 0.5)); }
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1rem, 3vw, 1.8rem);
+            font-weight: 300;
+            margin-top: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.5s forwards;
+            color: #b8b8d4;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            animation: bounce 2s ease infinite;
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        /* Reason cards */
+        .reasons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .reason-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .reason-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reason-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
+        }
+
+        .reason-card .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            transition: transform 0.3s;
+        }
+
+        .reason-card:hover .emoji {
+            transform: scale(1.3) rotate(10deg);
+        }
+
+        .reason-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #667eea;
+        }
+
+        .reason-card p {
+            color: #999;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Quote section */
+        .big-quote {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 300;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.5;
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Easter egg: Konami code */
+        .konami-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .konami-overlay.active {
+            display: flex;
+        }
+
+        .konami-overlay h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .konami-overlay p {
+            font-size: 1.3rem;
+            color: #b8b8d4;
+        }
+
+        .konami-overlay .close {
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
+            background: #667eea;
+            border: none;
+            border-radius: 2rem;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Easter egg: click counter */
+        .click-counter {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            color: #666;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .click-counter.visible { opacity: 1; }
+
+        /* Sparkle cursor trail */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            font-size: 1.2rem;
+            animation: sparkle-fade 0.8s ease forwards;
+        }
+
+        @keyframes sparkle-fade {
+            0% { opacity: 1; transform: scale(1) translateY(0); }
+            100% { opacity: 0; transform: scale(0) translateY(-30px); }
+        }
+
+        /* Secret message on triple click */
+        .secret-message {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.5s;
+            white-space: nowrap;
+        }
+
+        .secret-message.show {
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #444;
+            font-size: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer span {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .footer span:hover {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="click-counter" id="clickCounter">clicks: <span id="clickCount">0</span></div>
+
+    <section class="hero">
+        <h1>Justin</h1>
+        <p class="subtitle">A tribute to an absolute legend</p>
+        <div class="scroll-hint">&#8595;</div>
+    </section>
+
+    <section class="section">
+        <h2>Why Justin is incredible</h2>
+        <div class="reasons">
+            <div class="reason-card">
+                <span class="emoji">&#10024;</span>
+                <h3>Radiates good energy</h3>
+                <p>Walking into a room and making it instantly better is a rare superpower. Justin has it.</p>
+            </div>
+            <div class="reason-card">
+                <span class="emoji">&#129309;</span>
+                <h3>Always shows up</h3>
+                <p>Need help at 2am? Justin's there. Need someone to celebrate with? Also there. Consistency is king.</p>
+            </div>
+            <div class="reason-card">
+                <span class="emoji">&#129504;</span>
+                <h3>Genuinely smart</h3>
+                <p>Not the "look at me" kind of smart. The quiet, thoughtful, "wait that's actually brilliant" kind.</p>
+            </div>
+            <div class="reason-card">
+                <span class="emoji">&#128514;</span>
+                <h3>Hilarious</h3>
+                <p>Has that rare ability to make everyone laugh without trying too hard. Effortlessly funny.</p>
+            </div>
+            <div class="reason-card">
+                <span class="emoji">&#128170;</span>
+                <h3>Resilient</h3>
+                <p>Life throws curveballs. Justin catches them, juggles them, and somehow makes it look easy.</p>
+            </div>
+            <div class="reason-card">
+                <span class="emoji">&#128156;</span>
+                <h3>Genuinely kind</h3>
+                <p>Not performative kindness. The real deal. The kind that makes the world actually better.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="big-quote">
+            "Some people make the world more bearable just by being in it. Justin is one of those people."
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Official certification</h2>
+        <div class="reason-card visible" style="max-width: 500px; text-align: center;">
+            <span class="emoji">&#127942;</span>
+            <h3>Certificate of Greatness</h3>
+            <p>This is to certify that <strong>Justin</strong> is officially, undeniably, and scientifically a great person. This document is legally binding in all dimensions, timelines, and parallel universes.</p>
+            <p style="margin-top: 1rem; color: #667eea; font-size: 0.85rem;">Serial No: JUSTIN-001-GOAT</p>
+        </div>
+    </section>
+
+    <div class="footer">
+        <span id="footerText">made with love</span>
+    </div>
+
+    <div class="secret-message" id="secretMessage"></div>
+
+    <div class="konami-overlay" id="konamiOverlay">
+        <h2>&#127911; You found the secret!</h2>
+        <p>Justin's theme song should definitely be "You're The Best" by Joe Esposito</p>
+        <button class="close" onclick="document.getElementById('konamiOverlay').classList.remove('active')">Nice</button>
+    </div>
+
+    <script>
+        // Particles
+        const particlesEl = document.getElementById('particles');
+        const colors = ['#667eea', '#764ba2', '#f093fb', '#a78bfa', '#818cf8'];
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 8 + 3;
+            p.style.cssText = `
+                width: ${size}px; height: ${size}px;
+                left: ${Math.random() * 100}%;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                animation-duration: ${Math.random() * 15 + 10}s;
+                animation-delay: ${Math.random() * 10}s;
+            `;
+            particlesEl.appendChild(p);
+        }
+
+        // Scroll reveal for cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 150);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.reason-card:not(.visible)').forEach(c => observer.observe(c));
+
+        // Sparkle cursor trail
+        const sparkles = ['&#10024;', '&#11088;', '&#128171;', '&#9733;'];
+        let sparkleThrottle = 0;
+        document.addEventListener('mousemove', (e) => {
+            if (Date.now() - sparkleThrottle < 80) return;
+            sparkleThrottle = Date.now();
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.innerHTML = sparkles[Math.floor(Math.random() * sparkles.length)];
+            s.style.left = e.clientX + 'px';
+            s.style.top = e.clientY + 'px';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 800);
+        });
+
+        // Easter egg 1: Click counter
+        let clicks = 0;
+        const counter = document.getElementById('clickCounter');
+        const countEl = document.getElementById('clickCount');
+        const secretMsg = document.getElementById('secretMessage');
+        const messages = {
+            10: "You really like clicking huh?",
+            25: "Justin would be impressed by your dedication",
+            50: "Ok you're committed, respect",
+            100: "YOU ARE A CLICKING LEGEND (almost as cool as Justin)"
+        };
+        document.addEventListener('click', () => {
+            clicks++;
+            countEl.textContent = clicks;
+            if (clicks >= 5) counter.classList.add('visible');
+            if (messages[clicks]) {
+                secretMsg.textContent = messages[clicks];
+                secretMsg.classList.add('show');
+                setTimeout(() => secretMsg.classList.remove('show'), 3000);
+            }
+        });
+
+        // Easter egg 2: Konami code
+        const konamiCode = [38,38,40,40,37,39,37,39,66,65];
+        let konamiIndex = 0;
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    document.getElementById('konamiOverlay').classList.add('active');
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+
+        // Easter egg 3: Footer click cycles through messages
+        const footerMsgs = [
+            'made with love',
+            'seriously though, justin is great',
+            'like really great',
+            'top tier human',
+            'ok i\'ll stop now',
+            '...but he really is though'
+        ];
+        let footerIdx = 0;
+        document.getElementById('footerText').addEventListener('click', (e) => {
+            e.stopPropagation();
+            footerIdx = (footerIdx + 1) % footerMsgs.length;
+            e.target.textContent = footerMsgs[footerIdx];
+        });
+    </script>
+</body>
+</html>
